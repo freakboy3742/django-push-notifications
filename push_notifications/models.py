@@ -2,6 +2,10 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from .fields import HexIntegerField
+try:
+	from django.db.models import UUIDField
+except ImportError:
+	from uuidfield import UUIDField
 
 
 class Device(models.Model):
@@ -73,7 +77,7 @@ class APNSDeviceQuerySet(models.query.QuerySet):
 
 
 class APNSDevice(Device):
-	device_id = models.UUIDField(verbose_name=_("Device ID"), blank=True, null=True, db_index=True,
+	device_id = UUIDField(verbose_name=_("Device ID"), blank=True, null=True, db_index=True,
 		help_text="UDID / UIDevice.identifierForVendor()")
 	registration_id = models.CharField(verbose_name=_("Registration ID"), max_length=64, unique=True)
 
